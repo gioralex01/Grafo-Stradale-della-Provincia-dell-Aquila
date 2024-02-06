@@ -1,0 +1,1679 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        #map {
+            width: 1115px;
+            height: 509px;
+        }
+        </style>
+        <title>Strade gestite dall'Amministrazione Provinciale dell'Aquila</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/PROPROSHP_3.js"></script>
+        <script src="data/CONFINICOMUNALISHP_4.js"></script>
+        <script src="data/AREATECNICA5SHP_5.js"></script>
+        <script src="data/AREATECNICA5SHPpoint_6.js"></script>
+        <script src="data/AREATECNICA4SHP_7.js"></script>
+        <script src="data/AREATECNICA4SHPpoint_8.js"></script>
+        <script src="data/AREATECNICA3SHP_9.js"></script>
+        <script src="data/AREATECNICA3SHPpoint_10.js"></script>
+        <script src="data/AREATECNICA2SHP_11.js"></script>
+        <script src="data/AREATECNICA2SHPpoint_12.js"></script>
+        <script src="data/AREATECNICA1SHP_13.js"></script>
+        <script src="data/AREATECNICA1SHPpoint_14.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:27, minZoom:3
+        }).fitBounds([[41.64664986486303,12.836100163294484],[42.600972082433096,14.931091540326983]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleSatellite_0');
+        map.getPane('pane_GoogleSatellite_0').style.zIndex = 400;
+        var layer_GoogleSatellite_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatellite_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 3,
+            maxZoom: 27,
+        });
+        layer_GoogleSatellite_0;
+        map.createPane('pane_GoogleMaps_1');
+        map.getPane('pane_GoogleMaps_1').style.zIndex = 401;
+        var layer_GoogleMaps_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleMaps_1',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 3,
+            maxZoom: 27,
+        });
+        layer_GoogleMaps_1;
+        map.createPane('pane_CartoLight_2');
+        map.getPane('pane_CartoLight_2').style.zIndex = 402;
+        var layer_CartoLight_2 = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.pn', {
+            pane: 'pane_CartoLight_2',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 3,
+            maxZoom: 27,
+        });
+        layer_CartoLight_2;
+        map.addLayer(layer_CartoLight_2);
+        function pop_PROPROSHP_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PROPROSHP_3_0() {
+            return {
+                pane: 'pane_PROPROSHP_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.276)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(183,237,75,0.276)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PROPROSHP_3');
+        map.getPane('pane_PROPROSHP_3').style.zIndex = 403;
+        map.getPane('pane_PROPROSHP_3').style['mix-blend-mode'] = 'normal';
+        var layer_PROPROSHP_3 = new L.geoJson(json_PROPROSHP_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PROPROSHP_3',
+            layerName: 'layer_PROPROSHP_3',
+            pane: 'pane_PROPROSHP_3',
+            onEachFeature: pop_PROPROSHP_3,
+            style: style_PROPROSHP_3_0,
+        });
+        bounds_group.addLayer(layer_PROPROSHP_3);
+        map.addLayer(layer_PROPROSHP_3);
+        function pop_CONFINICOMUNALISHP_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Name</strong><br />' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>provincia</strong><br />' + (feature.properties['provincia'] !== null ? autolinker.link(feature.properties['provincia'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CONFINICOMUNALISHP_4_0() {
+            return {
+                pane: 'pane_CONFINICOMUNALISHP_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_CONFINICOMUNALISHP_4');
+        map.getPane('pane_CONFINICOMUNALISHP_4').style.zIndex = 404;
+        map.getPane('pane_CONFINICOMUNALISHP_4').style['mix-blend-mode'] = 'normal';
+        var layer_CONFINICOMUNALISHP_4 = new L.geoJson(json_CONFINICOMUNALISHP_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CONFINICOMUNALISHP_4',
+            layerName: 'layer_CONFINICOMUNALISHP_4',
+            pane: 'pane_CONFINICOMUNALISHP_4',
+            onEachFeature: pop_CONFINICOMUNALISHP_4,
+            style: style_CONFINICOMUNALISHP_4_0,
+        });
+        bounds_group.addLayer(layer_CONFINICOMUNALISHP_4);
+        map.addLayer(layer_CONFINICOMUNALISHP_4);
+        function pop_AREATECNICA5SHP_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA5SHP_5_0() {
+            return {
+                pane: 'pane_AREATECNICA5SHP_5',
+                opacity: 1,
+                color: 'rgba(84,176,74,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA5SHP_5');
+        map.getPane('pane_AREATECNICA5SHP_5').style.zIndex = 405;
+        map.getPane('pane_AREATECNICA5SHP_5').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA5SHP_5 = new L.geoJson(json_AREATECNICA5SHP_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA5SHP_5',
+            layerName: 'layer_AREATECNICA5SHP_5',
+            pane: 'pane_AREATECNICA5SHP_5',
+            onEachFeature: pop_AREATECNICA5SHP_5,
+            style: style_AREATECNICA5SHP_5_0,
+        });
+        bounds_group.addLayer(layer_AREATECNICA5SHP_5);
+        map.addLayer(layer_AREATECNICA5SHP_5);
+        function pop_AREATECNICA5SHPpoint_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA5SHPpoint_6_0() {
+            return {
+                pane: 'pane_AREATECNICA5SHPpoint_6',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(183,72,75,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA5SHPpoint_6');
+        map.getPane('pane_AREATECNICA5SHPpoint_6').style.zIndex = 406;
+        map.getPane('pane_AREATECNICA5SHPpoint_6').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA5SHPpoint_6 = new L.geoJson(json_AREATECNICA5SHPpoint_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA5SHPpoint_6',
+            layerName: 'layer_AREATECNICA5SHPpoint_6',
+            pane: 'pane_AREATECNICA5SHPpoint_6',
+            onEachFeature: pop_AREATECNICA5SHPpoint_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AREATECNICA5SHPpoint_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_AREATECNICA5SHPpoint_6);
+        map.addLayer(layer_AREATECNICA5SHPpoint_6);
+        function pop_AREATECNICA4SHP_7(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA4SHP_7_0() {
+            return {
+                pane: 'pane_AREATECNICA4SHP_7',
+                opacity: 1,
+                color: 'rgba(152,125,183,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA4SHP_7');
+        map.getPane('pane_AREATECNICA4SHP_7').style.zIndex = 407;
+        map.getPane('pane_AREATECNICA4SHP_7').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA4SHP_7 = new L.geoJson(json_AREATECNICA4SHP_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA4SHP_7',
+            layerName: 'layer_AREATECNICA4SHP_7',
+            pane: 'pane_AREATECNICA4SHP_7',
+            onEachFeature: pop_AREATECNICA4SHP_7,
+            style: style_AREATECNICA4SHP_7_0,
+        });
+        bounds_group.addLayer(layer_AREATECNICA4SHP_7);
+        map.addLayer(layer_AREATECNICA4SHP_7);
+        function pop_AREATECNICA4SHPpoint_8(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA4SHPpoint_8_0() {
+            return {
+                pane: 'pane_AREATECNICA4SHPpoint_8',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,89,137,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA4SHPpoint_8');
+        map.getPane('pane_AREATECNICA4SHPpoint_8').style.zIndex = 408;
+        map.getPane('pane_AREATECNICA4SHPpoint_8').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA4SHPpoint_8 = new L.geoJson(json_AREATECNICA4SHPpoint_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA4SHPpoint_8',
+            layerName: 'layer_AREATECNICA4SHPpoint_8',
+            pane: 'pane_AREATECNICA4SHPpoint_8',
+            onEachFeature: pop_AREATECNICA4SHPpoint_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AREATECNICA4SHPpoint_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_AREATECNICA4SHPpoint_8);
+        map.addLayer(layer_AREATECNICA4SHPpoint_8);
+        function pop_AREATECNICA3SHP_9(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA3SHP_9_0() {
+            return {
+                pane: 'pane_AREATECNICA3SHP_9',
+                opacity: 1,
+                color: 'rgba(196,60,57,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA3SHP_9');
+        map.getPane('pane_AREATECNICA3SHP_9').style.zIndex = 409;
+        map.getPane('pane_AREATECNICA3SHP_9').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA3SHP_9 = new L.geoJson(json_AREATECNICA3SHP_9, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA3SHP_9',
+            layerName: 'layer_AREATECNICA3SHP_9',
+            pane: 'pane_AREATECNICA3SHP_9',
+            onEachFeature: pop_AREATECNICA3SHP_9,
+            style: style_AREATECNICA3SHP_9_0,
+        });
+        bounds_group.addLayer(layer_AREATECNICA3SHP_9);
+        map.addLayer(layer_AREATECNICA3SHP_9);
+        function pop_AREATECNICA3SHPpoint_10(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA3SHPpoint_10_0() {
+            return {
+                pane: 'pane_AREATECNICA3SHPpoint_10',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(145,82,45,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA3SHPpoint_10');
+        map.getPane('pane_AREATECNICA3SHPpoint_10').style.zIndex = 410;
+        map.getPane('pane_AREATECNICA3SHPpoint_10').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA3SHPpoint_10 = new L.geoJson(json_AREATECNICA3SHPpoint_10, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA3SHPpoint_10',
+            layerName: 'layer_AREATECNICA3SHPpoint_10',
+            pane: 'pane_AREATECNICA3SHPpoint_10',
+            onEachFeature: pop_AREATECNICA3SHPpoint_10,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AREATECNICA3SHPpoint_10_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_AREATECNICA3SHPpoint_10);
+        map.addLayer(layer_AREATECNICA3SHPpoint_10);
+        function pop_AREATECNICA2SHP_11(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA2SHP_11_0() {
+            return {
+                pane: 'pane_AREATECNICA2SHP_11',
+                opacity: 1,
+                color: 'rgba(133,182,111,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA2SHP_11');
+        map.getPane('pane_AREATECNICA2SHP_11').style.zIndex = 411;
+        map.getPane('pane_AREATECNICA2SHP_11').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA2SHP_11 = new L.geoJson(json_AREATECNICA2SHP_11, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA2SHP_11',
+            layerName: 'layer_AREATECNICA2SHP_11',
+            pane: 'pane_AREATECNICA2SHP_11',
+            onEachFeature: pop_AREATECNICA2SHP_11,
+            style: style_AREATECNICA2SHP_11_0,
+        });
+        bounds_group.addLayer(layer_AREATECNICA2SHP_11);
+        map.addLayer(layer_AREATECNICA2SHP_11);
+        function pop_AREATECNICA2SHPpoint_12(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Name</strong><br />' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA2SHPpoint_12_0() {
+            return {
+                pane: 'pane_AREATECNICA2SHPpoint_12',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(213,180,60,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA2SHPpoint_12');
+        map.getPane('pane_AREATECNICA2SHPpoint_12').style.zIndex = 412;
+        map.getPane('pane_AREATECNICA2SHPpoint_12').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA2SHPpoint_12 = new L.geoJson(json_AREATECNICA2SHPpoint_12, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA2SHPpoint_12',
+            layerName: 'layer_AREATECNICA2SHPpoint_12',
+            pane: 'pane_AREATECNICA2SHPpoint_12',
+            onEachFeature: pop_AREATECNICA2SHPpoint_12,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AREATECNICA2SHPpoint_12_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_AREATECNICA2SHPpoint_12);
+        map.addLayer(layer_AREATECNICA2SHPpoint_12);
+        function pop_AREATECNICA1SHP_13(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA1SHP_13_0() {
+            return {
+                pane: 'pane_AREATECNICA1SHP_13',
+                opacity: 1,
+                color: 'rgba(243,166,178,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA1SHP_13');
+        map.getPane('pane_AREATECNICA1SHP_13').style.zIndex = 413;
+        map.getPane('pane_AREATECNICA1SHP_13').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA1SHP_13 = new L.geoJson(json_AREATECNICA1SHP_13, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA1SHP_13',
+            layerName: 'layer_AREATECNICA1SHP_13',
+            pane: 'pane_AREATECNICA1SHP_13',
+            onEachFeature: pop_AREATECNICA1SHP_13,
+            style: style_AREATECNICA1SHP_13_0,
+        });
+        bounds_group.addLayer(layer_AREATECNICA1SHP_13);
+        map.addLayer(layer_AREATECNICA1SHP_13);
+        function pop_AREATECNICA1SHPpoint_14(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AREATECNICA1SHPpoint_14_0() {
+            return {
+                pane: 'pane_AREATECNICA1SHPpoint_14',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,113,141,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AREATECNICA1SHPpoint_14');
+        map.getPane('pane_AREATECNICA1SHPpoint_14').style.zIndex = 414;
+        map.getPane('pane_AREATECNICA1SHPpoint_14').style['mix-blend-mode'] = 'normal';
+        var layer_AREATECNICA1SHPpoint_14 = new L.geoJson(json_AREATECNICA1SHPpoint_14, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AREATECNICA1SHPpoint_14',
+            layerName: 'layer_AREATECNICA1SHPpoint_14',
+            pane: 'pane_AREATECNICA1SHPpoint_14',
+            onEachFeature: pop_AREATECNICA1SHPpoint_14,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AREATECNICA1SHPpoint_14_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_AREATECNICA1SHPpoint_14);
+        map.addLayer(layer_AREATECNICA1SHPpoint_14);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>Strade gestite dall\'Amministrazione Provinciale dell\'Aquila</h2>';
+            };
+            title.addTo(map);
+            var abstract = new L.Control({'position':'bottomleft'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+
+                    abstract.show();
+                    return this._div;
+                };
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'Catasto della viabilità della Provincia dell\'Aquila per le strade gestite dall\'ente con indicazione dei capisaldi e della gestione delle strade provinciali da parte dei comuni.';
+            };
+            abstract.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/AREATECNICA1SHPpoint_14.png" /> AREA TECNICA 1 SHP point': layer_AREATECNICA1SHPpoint_14,'<img src="legend/AREATECNICA1SHP_13.png" /> AREA TECNICA 1 SHP': layer_AREATECNICA1SHP_13,'<img src="legend/AREATECNICA2SHPpoint_12.png" /> AREA TECNICA 2 SHP point': layer_AREATECNICA2SHPpoint_12,'<img src="legend/AREATECNICA2SHP_11.png" /> AREA TECNICA 2 SHP': layer_AREATECNICA2SHP_11,'<img src="legend/AREATECNICA3SHPpoint_10.png" /> AREA TECNICA 3 SHP point': layer_AREATECNICA3SHPpoint_10,'<img src="legend/AREATECNICA3SHP_9.png" /> AREA TECNICA 3 SHP': layer_AREATECNICA3SHP_9,'<img src="legend/AREATECNICA4SHPpoint_8.png" /> AREA TECNICA 4 SHP point': layer_AREATECNICA4SHPpoint_8,'<img src="legend/AREATECNICA4SHP_7.png" /> AREA TECNICA 4 SHP': layer_AREATECNICA4SHP_7,'<img src="legend/AREATECNICA5SHPpoint_6.png" /> AREA TECNICA 5 SHP point': layer_AREATECNICA5SHPpoint_6,'<img src="legend/AREATECNICA5SHP_5.png" /> AREA TECNICA 5 SHP': layer_AREATECNICA5SHP_5,'<img src="legend/CONFINICOMUNALISHP_4.png" /> CONFINI COMUNALI SHP': layer_CONFINICOMUNALISHP_4,'<img src="legend/PROPROSHP_3.png" /> PRO PRO SHP': layer_PROPROSHP_3,"Carto Light": layer_CartoLight_2,"Google Maps": layer_GoogleMaps_1,"Google Satellite": layer_GoogleSatellite_0,}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_CONFINICOMUNALISHP_4.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Name'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Liberation Sans\', sans-serif;">' + layer.feature.properties['Name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CONFINICOMUNALISHP_4'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        map.addControl(new L.Control.Search({
+            layer: layer_AREATECNICA1SHP_13,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'Name'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Name": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+        var i = 0;
+        layer_CONFINICOMUNALISHP_4.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Name'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Liberation Sans\', sans-serif;">' + layer.feature.properties['Name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CONFINICOMUNALISHP_4'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Name = document.createElement('div');
+            div_Name.id = "div_Name";
+            div_Name.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Name);
+            sel_Name = document.createElement('select');
+            sel_Name.multiple = true;
+            sel_Name.size = 10;
+            sel_Name.id = "sel_Name";
+            var Name_options_str = "<option value='' unselected></option>";
+            sel_Name.onchange = function(){filterFunc()};
+            Name_options_str  += '<option value="ACCIANO">ACCIANO</option>';
+            Name_options_str  += '<option value="AIELLI">AIELLI</option>';
+            Name_options_str  += '<option value="ALFEDENA">ALFEDENA</option>';
+            Name_options_str  += '<option value="ANVERSA DEGLI ABRUZZI">ANVERSA DEGLI ABRUZZI</option>';
+            Name_options_str  += '<option value="ATELETA">ATELETA</option>';
+            Name_options_str  += '<option value="AVEZZANO">AVEZZANO</option>';
+            Name_options_str  += '<option value="BALSORANO">BALSORANO</option>';
+            Name_options_str  += '<option value="BARETE">BARETE</option>';
+            Name_options_str  += '<option value="BARISCIANO">BARISCIANO</option>';
+            Name_options_str  += '<option value="BARREA">BARREA</option>';
+            Name_options_str  += '<option value="BISEGNA">BISEGNA</option>';
+            Name_options_str  += '<option value="BUGNARA">BUGNARA</option>';
+            Name_options_str  += '<option value="CAGNANO AMITERNO">CAGNANO AMITERNO</option>';
+            Name_options_str  += '<option value="CALASCIO">CALASCIO</option>';
+            Name_options_str  += '<option value="CAMPO DI GIOVE">CAMPO DI GIOVE</option>';
+            Name_options_str  += '<option value="CAMPOTOSTO">CAMPOTOSTO</option>';
+            Name_options_str  += '<option value="CANISTRO">CANISTRO</option>';
+            Name_options_str  += '<option value="CANSANO">CANSANO</option>';
+            Name_options_str  += '<option value="CAPESTRANO">CAPESTRANO</option>';
+            Name_options_str  += '<option value="CAPISTRELLO">CAPISTRELLO</option>';
+            Name_options_str  += '<option value="CAPITIGNANO">CAPITIGNANO</option>';
+            Name_options_str  += '<option value="CAPORCIANO">CAPORCIANO</option>';
+            Name_options_str  += '<option value="CAPPADOCIA">CAPPADOCIA</option>';
+            Name_options_str  += '<option value="CARAPELLE CALVISIO">CARAPELLE CALVISIO</option>';
+            Name_options_str  += '<option value="CARSOLI">CARSOLI</option>';
+            Name_options_str  += '<option value="CASTEL DEL MONTE">CASTEL DEL MONTE</option>';
+            Name_options_str  += '<option value="CASTEL DI IERI">CASTEL DI IERI</option>';
+            Name_options_str  += '<option value="CASTEL DI SANGRO">CASTEL DI SANGRO</option>';
+            Name_options_str  += '<option value="CASTELLAFIUME">CASTELLAFIUME</option>';
+            Name_options_str  += '<option value="CASTELVECCHIO CALVISIO">CASTELVECCHIO CALVISIO</option>';
+            Name_options_str  += '<option value="CASTELVECCHIO SUBEQUO">CASTELVECCHIO SUBEQUO</option>';
+            Name_options_str  += '<option value="CELANO">CELANO</option>';
+            Name_options_str  += '<option value="CERCHIO">CERCHIO</option>';
+            Name_options_str  += '<option value="CIVITA D&apos;ANTINO">CIVITA D&apos;ANTINO</option>';
+            Name_options_str  += '<option value="CIVITELLA ALFEDENA">CIVITELLA ALFEDENA</option>';
+            Name_options_str  += '<option value="CIVITELLA ROVETO">CIVITELLA ROVETO</option>';
+            Name_options_str  += '<option value="COCULLO">COCULLO</option>';
+            Name_options_str  += '<option value="COLLARMELE">COLLARMELE</option>';
+            Name_options_str  += '<option value="COLLELONGO">COLLELONGO</option>';
+            Name_options_str  += '<option value="COLLEPIETRO">COLLEPIETRO</option>';
+            Name_options_str  += '<option value="COMUNE DELL&apos;AQUILA">COMUNE DELL&apos;AQUILA</option>';
+            Name_options_str  += '<option value="CORFINIO">CORFINIO</option>';
+            Name_options_str  += '<option value="FAGNANO ALTO">FAGNANO ALTO</option>';
+            Name_options_str  += '<option value="FONTECCHIO">FONTECCHIO</option>';
+            Name_options_str  += '<option value="FOSSA">FOSSA</option>';
+            Name_options_str  += '<option value="GAGLIANO ATERNO">GAGLIANO ATERNO</option>';
+            Name_options_str  += '<option value="GIOIA DEI MARSI">GIOIA DEI MARSI</option>';
+            Name_options_str  += '<option value="GORIANO SICOLI">GORIANO SICOLI</option>';
+            Name_options_str  += '<option value="INTRODACQUA">INTRODACQUA</option>';
+            Name_options_str  += '<option value="L&apos;AQUILA">L&apos;AQUILA</option>';
+            Name_options_str  += '<option value="LECCE NEI MARSI">LECCE NEI MARSI</option>';
+            Name_options_str  += '<option value="LUCOLI">LUCOLI</option>';
+            Name_options_str  += '<option value="MAGLIANO DE&apos; MARSI">MAGLIANO DE&apos; MARSI</option>';
+            Name_options_str  += '<option value="MASSA D&apos;ALBE">MASSA D&apos;ALBE</option>';
+            Name_options_str  += '<option value="MOLINA ATERNO">MOLINA ATERNO</option>';
+            Name_options_str  += '<option value="MONTEREALE">MONTEREALE</option>';
+            Name_options_str  += '<option value="MORINO">MORINO</option>';
+            Name_options_str  += '<option value="NAVELLI">NAVELLI</option>';
+            Name_options_str  += '<option value="NLUCO DEI MARSI">NLUCO DEI MARSI</option>';
+            Name_options_str  += '<option value="OCRE">OCRE</option>';
+            Name_options_str  += '<option value="OFENA">OFENA</option>';
+            Name_options_str  += '<option value="OPI">OPI</option>';
+            Name_options_str  += '<option value="ORICOLA">ORICOLA</option>';
+            Name_options_str  += '<option value="ORTONA DEI MARSI">ORTONA DEI MARSI</option>';
+            Name_options_str  += '<option value="ORTUCCHIO">ORTUCCHIO</option>';
+            Name_options_str  += '<option value="OVINDOLI">OVINDOLI</option>';
+            Name_options_str  += '<option value="PACENTRO">PACENTRO</option>';
+            Name_options_str  += '<option value="PERETO">PERETO</option>';
+            Name_options_str  += '<option value="PESCASSEROLI">PESCASSEROLI</option>';
+            Name_options_str  += '<option value="PESCINA">PESCINA</option>';
+            Name_options_str  += '<option value="PESCOCOSTANZO">PESCOCOSTANZO</option>';
+            Name_options_str  += '<option value="PETTORANO SUL GIZIO">PETTORANO SUL GIZIO</option>';
+            Name_options_str  += '<option value="PIZZOLI">PIZZOLI</option>';
+            Name_options_str  += '<option value="POGGIO PICENZE">POGGIO PICENZE</option>';
+            Name_options_str  += '<option value="PRATA D&apos;ANSIDONIA">PRATA D&apos;ANSIDONIA</option>';
+            Name_options_str  += '<option value="PRATOLA PELIGNA">PRATOLA PELIGNA</option>';
+            Name_options_str  += '<option value="PREZZA">PREZZA</option>';
+            Name_options_str  += '<option value="PROVINCIA DELL&apos;AQUILA">PROVINCIA DELL&apos;AQUILA</option>';
+            Name_options_str  += '<option value="RAIANO">RAIANO</option>';
+            Name_options_str  += '<option value="RIVISONDOLI">RIVISONDOLI</option>';
+            Name_options_str  += '<option value="ROCCA DI BOTTE">ROCCA DI BOTTE</option>';
+            Name_options_str  += '<option value="ROCCA DI CAMBIO">ROCCA DI CAMBIO</option>';
+            Name_options_str  += '<option value="ROCCA DI MEZZO">ROCCA DI MEZZO</option>';
+            Name_options_str  += '<option value="ROCCA PIA">ROCCA PIA</option>';
+            Name_options_str  += '<option value="ROCCACASALE">ROCCACASALE</option>';
+            Name_options_str  += '<option value="ROCCARASO">ROCCARASO</option>';
+            Name_options_str  += '<option value="SAN BENEDETTO DEI MARSI">SAN BENEDETTO DEI MARSI</option>';
+            Name_options_str  += '<option value="SAN BENEDETTO IN PERILLIS">SAN BENEDETTO IN PERILLIS</option>';
+            Name_options_str  += '<option value="SAN DEMETRIO NE&apos; VESTINI">SAN DEMETRIO NE&apos; VESTINI</option>';
+            Name_options_str  += '<option value="SAN PIO DELLE CAMERE">SAN PIO DELLE CAMERE</option>';
+            Name_options_str  += '<option value="SAN VINCENZO VALLE ROVETO">SAN VINCENZO VALLE ROVETO</option>';
+            Name_options_str  += '<option value="SANT&apos;EUSANIO FORCONESE">SANT&apos;EUSANIO FORCONESE</option>';
+            Name_options_str  += '<option value="SANTE MARIE">SANTE MARIE</option>';
+            Name_options_str  += '<option value="SANTO STEFANO DI SESSANIO">SANTO STEFANO DI SESSANIO</option>';
+            Name_options_str  += '<option value="SCANNO">SCANNO</option>';
+            Name_options_str  += '<option value="SCONTRONE">SCONTRONE</option>';
+            Name_options_str  += '<option value="SCOPPITO">SCOPPITO</option>';
+            Name_options_str  += '<option value="SCURCOLA MARSICANA">SCURCOLA MARSICANA</option>';
+            Name_options_str  += '<option value="SECINARO">SECINARO</option>';
+            Name_options_str  += '<option value="SP 2 dir Poggio Cancelli">SP 2 dir Poggio Cancelli</option>';
+            Name_options_str  += '<option value="SP 2 dir km 0+000 - Caposaldo Inizio">SP 2 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP 2 dir km 0+270 - Caposaldo Fine">SP 2 dir km 0+270 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP 32 di Lucoli Alto">SP 32 di Lucoli Alto</option>';
+            Name_options_str  += '<option value="SP 32 di Lucoli Alto km 0+000 - Caposaldo Inizio">SP 32 di Lucoli Alto km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP 36 Forconese km 0+000 - Caposaldo Inizio">SP 36 Forconese km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP 40 di Bominaco km 16+235">SP 40 di Bominaco km 16+235</option>';
+            Name_options_str  += '<option value="SP 48 di Acciano km 0+000 - Caposaldo Inizio">SP 48 di Acciano km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP 48 di Acciano km 2+045 - Caposaldo Fine">SP 48 di Acciano km 2+045 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP 5 Silvaplana II Tronco">SP 5 Silvaplana II Tronco</option>';
+            Name_options_str  += '<option value="SP 5 Silvaplana III Tronco">SP 5 Silvaplana III Tronco</option>';
+            Name_options_str  += '<option value="SP 5 km 10+990 - Interruzione Competenza">SP 5 km 10+990 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP 5 km 10+990 - Ripresa Competenza">SP 5 km 10+990 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP 5 km 12+160 - Caposaldo Fine">SP 5 km 12+160 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP 94 del Tirino">SP 94 del Tirino</option>';
+            Name_options_str  += '<option value="SP1 Amiternina">SP1 Amiternina</option>';
+            Name_options_str  += '<option value="SP1 Amiternina km 0+000 - Caposaldo Inizio">SP1 Amiternina km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP1 Amiternina km 28+600 - Caposaldo Fine">SP1 Amiternina km 28+600 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP10 Peligna A - Competenza Provincia PE">SP10 Peligna A - Competenza Provincia PE</option>';
+            Name_options_str  += '<option value="SP10 Peligna B">SP10 Peligna B</option>';
+            Name_options_str  += '<option value="SP10 Peligna C">SP10 Peligna C</option>';
+            Name_options_str  += '<option value="SP10 dir Din. Nob. km 0+000 - Caposaldo Inizio">SP10 dir Din. Nob. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP10 dir Din. Nob. km 4+300 - Caposaldo Fine">SP10 dir Din. Nob. km 4+300 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP10 dir Dinamificio Nobel">SP10 dir Dinamificio Nobel</option>';
+            Name_options_str  += '<option value="SP10 dir Palazzo">SP10 dir Palazzo</option>';
+            Name_options_str  += '<option value="SP10 dir Palazzo km 0+000 - Caposaldo Inizio">SP10 dir Palazzo km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP10 dir Palazzo km 1+200 - Caposaldo Fine">SP10 dir Palazzo km 1+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP10 dir Prezza">SP10 dir Prezza</option>';
+            Name_options_str  += '<option value="SP10 dir Prezza km 0+000 - Caposaldo Inizio">SP10 dir Prezza km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP10 dir Prezza km 3+100 - Caposaldo Fine">SP10 dir Prezza km 3+100 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP10 dir del Rio">SP10 dir del Rio</option>';
+            Name_options_str  += '<option value="SP10 dir del Rio km 0+000 - Caposaldo Inizio">SP10 dir del Rio km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP10 dir del Rio km 1+950 - Caposaldo Fine">SP10 dir del Rio km 1+950 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP10 km 0+000 - Caposaldo Inizio">SP10 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP10 km 11+130 - Interruzione Competenza">SP10 km 11+130 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP10 km 11+300 - Ripresa Competenza">SP10 km 11+300 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP10 km 23+720 - Caposaldo Fine">SP10 km 23+720 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP10 km 3+610 - Inizio Competenza">SP10 km 3+610 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP100 A km 0+000 - Caposaldo Inizio">SP100 A km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP100 A km 1+410 - Caposaldo Fine">SP100 A km 1+410 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP100 B km 0+000 - Caposaldo Inizio">SP100 B km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP100 B km 0+500 - Caposaldo Fine">SP100 B km 0+500 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP100 Napoleonica A">SP100 Napoleonica A</option>';
+            Name_options_str  += '<option value="SP100 Napoleonica B">SP100 Napoleonica B</option>';
+            Name_options_str  += '<option value="SP101 di Ridotti">SP101 di Ridotti</option>';
+            Name_options_str  += '<option value="SP101 km 0+000 - Caposaldo Inizio">SP101 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP101 km 4+800 - Caposaldo Fine">SP101 km 4+800 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP103 di Filetto">SP103 di Filetto</option>';
+            Name_options_str  += '<option value="SP103 dir Variante Filetto">SP103 dir Variante Filetto</option>';
+            Name_options_str  += '<option value="SP103 dir km 0+000 - Caposaldo Inizio">SP103 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP103 dir km 1+320 - Caposaldo Fine">SP103 dir km 1+320 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP103 km 0+000 - Caposaldo Inizio">SP103 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP103 km 16+375 - Caposaldo Fine">SP103 km 16+375 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP104 della Rocchetta">SP104 della Rocchetta</option>';
+            Name_options_str  += '<option value="SP104 km 0+000 - Caposaldo Inizio">SP104 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP104 km 6+272 - Caposaldo Fine">SP104 km 6+272 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP105 di Monte Cabbia">SP105 di Monte Cabbia</option>';
+            Name_options_str  += '<option value="SP105 dir Le Pezze">SP105 dir Le Pezze</option>';
+            Name_options_str  += '<option value="SP105 dir km 0+000 - Caposaldo Inizio">SP105 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP105 dir km 3+860 - Caposaldo Fine">SP105 dir km 3+860 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP105 km 0+000  - Caposaldo Inizio">SP105 km 0+000  - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP105 km 15+300 - Caposaldo Fine">SP105 km 15+300 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP107 di Villa Romana">SP107 di Villa Romana</option>';
+            Name_options_str  += '<option value="SP107 km 0+000 - Caposaldo Inizio">SP107 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP107 km 10+700 - Caposaldo Fine">SP107 km 10+700 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP108 Aveiense">SP108 Aveiense</option>';
+            Name_options_str  += '<option value="SP108 km 0+000 - Caposaldo Inizio">SP108 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP108 km 5+100 - Caposaldo Fine">SP108 km 5+100 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP109 di Rocca Preturo">SP109 di Rocca Preturo</option>';
+            Name_options_str  += '<option value="SP109 di Rocca Preturo km 0+000 - Caposaldo Inizio">SP109 di Rocca Preturo km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP109 di Rocca Preturo km 2+320 - Caposaldo Fine">SP109 di Rocca Preturo km 2+320 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP11 Sirentina A">SP11 Sirentina A</option>';
+            Name_options_str  += '<option value="SP11 Sirentina B">SP11 Sirentina B</option>';
+            Name_options_str  += '<option value="SP11 km 0+000 - Caposaldo Inizio">SP11 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP11 km 20+400 - Caposaldo Intermedio">SP11 km 20+400 - Caposaldo Intermedio</option>';
+            Name_options_str  += '<option value="SP11 km 28+030 - Caposaldo Fine">SP11 km 28+030 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP110 di Frattura">SP110 di Frattura</option>';
+            Name_options_str  += '<option value="SP110 km 0+000 - Caposaldo Inizio">SP110 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP110 km 6+900 - Caposaldo Fine">SP110 km 6+900 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP111 di Monte Serra Secca">SP111 di Monte Serra Secca</option>';
+            Name_options_str  += '<option value="SP111 dir km 0+000 - Caposaldo Inizio">SP111 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP111 dir km 2+580 - Caposaldo Fine">SP111 dir km 2+580 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP111 diramazione">SP111 diramazione</option>';
+            Name_options_str  += '<option value="SP111 km 0+000 - Caposaldo Inizio">SP111 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP111 km 6+240 - Caposaldo Fine">SP111 km 6+240 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP112 dell&apos;Ancinara">SP112 dell&apos;Ancinara</option>';
+            Name_options_str  += '<option value="SP112 km 0+000 - Caposaldo Inizio">SP112 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP112 km 3+800 - Caposaldo Fine">SP112 km 3+800 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP114 della Portella">SP114 della Portella</option>';
+            Name_options_str  += '<option value="SP114 km 0+000 - Caposaldo Inizio">SP114 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP114 km 2+100 - Caposaldo Fine">SP114 km 2+100 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP115 La Torre">SP115 La Torre</option>';
+            Name_options_str  += '<option value="SP115 km 0+000 - Caposaldo Inizio">SP115 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP115 km 3+415 - Caposaldo Fine">SP115 km 3+415 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP116 di Cantone">SP116 di Cantone</option>';
+            Name_options_str  += '<option value="SP116 km 0+000 - Caposaldo Inizio">SP116 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP116 km 3+750 - Caposaldo Fine">SP116 km 3+750 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP117 bretella SP53">SP117 bretella SP53</option>';
+            Name_options_str  += '<option value="SP117 di Mastroiacovo">SP117 di Mastroiacovo</option>';
+            Name_options_str  += '<option value="SP117 km 0+000 - Caposaldo Inizio">SP117 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP117 km 2+130 - Caposaldo Fine">SP117 km 2+130 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP118 Fanesina A">SP118 Fanesina A</option>';
+            Name_options_str  += '<option value="SP118 Fanesina B">SP118 Fanesina B</option>';
+            Name_options_str  += '<option value="SP118 Fanesina C">SP118 Fanesina C</option>';
+            Name_options_str  += '<option value="SP118 Fanesina D">SP118 Fanesina D</option>';
+            Name_options_str  += '<option value="SP118 dir Prezza">SP118 dir Prezza</option>';
+            Name_options_str  += '<option value="SP118 dir km 0+000 - Caposaldo Inizio">SP118 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP118 dir km 3+190 - Caposaldo Fine">SP118 dir km 3+190 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP118 km 0+000 - Caposaldo Inizio">SP118 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP118 km 10+250 - Caposaldo Fine">SP118 km 10+250 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP118 km 3+400 - Interruzione">SP118 km 3+400 - Interruzione</option>';
+            Name_options_str  += '<option value="SP118 km 3+500 - Ripresa">SP118 km 3+500 - Ripresa</option>';
+            Name_options_str  += '<option value="SP118 km 6+900 - Interruzione">SP118 km 6+900 - Interruzione</option>';
+            Name_options_str  += '<option value="SP118 km 7+150 - Ripresa">SP118 km 7+150 - Ripresa</option>';
+            Name_options_str  += '<option value="SP118 km 8+450 - Interruzione">SP118 km 8+450 - Interruzione</option>';
+            Name_options_str  += '<option value="SP118 km 8+550 - Ripresa">SP118 km 8+550 - Ripresa</option>';
+            Name_options_str  += '<option value="SP119 del Sangro">SP119 del Sangro</option>';
+            Name_options_str  += '<option value="SP119 km 0+000 - Caposaldo Inizio">SP119 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP119 km 5+040 - Caposaldo Fine">SP119 km 5+040 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP11dir Castelvecchio Subequo">SP11dir Castelvecchio Subequo</option>';
+            Name_options_str  += '<option value="SP11dir Castelvecchio Subequo km 0+000 - Caposaldo Inizio">SP11dir Castelvecchio Subequo km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP11dir Castelvecchio Subequo km 3+450 - Caposaldo Fine">SP11dir Castelvecchio Subequo km 3+450 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP11dir Molina Aterno">SP11dir Molina Aterno</option>';
+            Name_options_str  += '<option value="SP11dir Molina Aterno km 0+000 - Caposaldo Inizio">SP11dir Molina Aterno km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP11dir Molina Aterno km 3+440 - Caposaldo Fine">SP11dir Molina Aterno km 3+440 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP11dir Secinaro-Castelvecchio Subequo">SP11dir Secinaro-Castelvecchio Subequo</option>';
+            Name_options_str  += '<option value="SP11dir Secinaro-Castelvecchio km 0+000 - Caposaldo Inizio">SP11dir Secinaro-Castelvecchio km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP11dir Secinaro-Castelvecchio km 6+550 - Caposaldo Fine">SP11dir Secinaro-Castelvecchio km 6+550 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP11dir Traversa Gagliano">SP11dir Traversa Gagliano</option>';
+            Name_options_str  += '<option value="SP11dir Traversa Gagliano km 0+000 - Caposaldo Inizio">SP11dir Traversa Gagliano km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP11dir Traversa Gagliano km 0+540 - Caposaldo Fine">SP11dir Traversa Gagliano km 0+540 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP12 Frentana">SP12 Frentana</option>';
+            Name_options_str  += '<option value="SP12 dir FF.SS. Campo di Giove">SP12 dir FF.SS. Campo di Giove</option>';
+            Name_options_str  += '<option value="SP12 dir FF.SS. Campo di Giove km 0+000 - Caposaldo Inizio">SP12 dir FF.SS. Campo di Giove km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP12 dir FF.SS. Campo di Giove km 1+230 - Caposaldo Fine">SP12 dir FF.SS. Campo di Giove km 1+230 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP12 dir FF.SS. Cansano">SP12 dir FF.SS. Cansano</option>';
+            Name_options_str  += '<option value="SP12 dir FF.SS. Cansano km 0+000 - Caposaldo Inizio">SP12 dir FF.SS. Cansano km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP12 dir FF.SS. Cansano km 1+780 - Caposaldo Fine">SP12 dir FF.SS. Cansano km 1+780 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP12 km 0+000 - Caposaldo Inizio">SP12 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP12 km 22+400 - Caposaldo Fine">SP12 km 22+400 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP120 Mausonia - A">SP120 Mausonia - A</option>';
+            Name_options_str  += '<option value="SP120 Mausonia km 0+000 - Caposaldo Inizio">SP120 Mausonia km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP120 Mausonia km 6+192 - Caposaldo Fine">SP120 Mausonia km 6+192 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP121 A - Competenza Comunale Castel di Sangro">SP121 A - Competenza Comunale Castel di Sangro</option>';
+            Name_options_str  += '<option value="SP121 B - Competenza Provincia AQ">SP121 B - Competenza Provincia AQ</option>';
+            Name_options_str  += '<option value="SP121 C - Competenza Provincia IS">SP121 C - Competenza Provincia IS</option>';
+            Name_options_str  += '<option value="SP121 D - Competenza Provincia AQ">SP121 D - Competenza Provincia AQ</option>';
+            Name_options_str  += '<option value="SP121 km 0+000 - Caposaldo Inizio">SP121 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP121 km 13+315 - Fine Competenza Provincia IS">SP121 km 13+315 - Fine Competenza Provincia IS</option>';
+            Name_options_str  += '<option value="SP121 km 15+900 - Fine Competenza Provincia AQ">SP121 km 15+900 - Fine Competenza Provincia AQ</option>';
+            Name_options_str  += '<option value="SP121 km 2+300 - Inizio Competenza Provincia AQ">SP121 km 2+300 - Inizio Competenza Provincia AQ</option>';
+            Name_options_str  += '<option value="SP121 km 7+859 - Fine Competenza Provincia AQ">SP121 km 7+859 - Fine Competenza Provincia AQ</option>';
+            Name_options_str  += '<option value="SP122 dell&apos;Oriente">SP122 dell&apos;Oriente</option>';
+            Name_options_str  += '<option value="SP122 km 0+000 - Caposaldo Inizio">SP122 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP122 km 4+900 - Caposaldo Fine">SP122 km 4+900 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP123 di Castrovalva">SP123 di Castrovalva</option>';
+            Name_options_str  += '<option value="SP123 km 0+000 - Caposaldo Inizio">SP123 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP123 km 3+200 - Caposaldo Fine">SP123 km 3+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP124 Nespolo-Tufo">SP124 Nespolo-Tufo</option>';
+            Name_options_str  += '<option value="SP124 km 0+000 - Caposaldo Inizio">SP124 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP124 km 3+000 - Fine Competenza">SP124 km 3+000 - Fine Competenza</option>';
+            Name_options_str  += '<option value="SP125 di Antrosano">SP125 di Antrosano</option>';
+            Name_options_str  += '<option value="SP125 km 0+000 - Caposaldo Inizio">SP125 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP125 km 6+300 - Caposaldo Fine">SP125 km 6+300 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP126 di Ponte Peschio">SP126 di Ponte Peschio</option>';
+            Name_options_str  += '<option value="SP126 km 0+000 - Caposaldo Inizio">SP126 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP126 km 0+330 - Caposaldo Fine">SP126 km 0+330 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP127 della Vallelonga">SP127 della Vallelonga</option>';
+            Name_options_str  += '<option value="SP127 km 0+000 - Caposaldo Inizio">SP127 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP127 km 15+400 - Caposaldo Fine">SP127 km 15+400 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP13 Morronese">SP13 Morronese</option>';
+            Name_options_str  += '<option value="SP13 dir Badia">SP13 dir Badia</option>';
+            Name_options_str  += '<option value="SP13 dir Badia km 0+000 - Caposaldo Inizio">SP13 dir Badia km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP13 dir Badia km 2+050 - Caposaldo Fine">SP13 dir Badia km 2+050 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP13 dir Marane">SP13 dir Marane</option>';
+            Name_options_str  += '<option value="SP13 dir Marane km 0+000 - Caposaldo Inizio">SP13 dir Marane km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP13 dir Marane km 1+150 - Caposaldo Fine">SP13 dir Marane km 1+150 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP13 km 0+000 - Caposaldo Inizio">SP13 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP13 km 11+350 - Caposaldo Fine">SP13 km 11+350 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP14 di Introdacqua">SP14 di Introdacqua</option>';
+            Name_options_str  += '<option value="SP14 km 0+000 - Caposaldo Inizio">SP14 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP14 km 2+130 - Caposaldo Fine">SP14 km 2+130 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP15 di Anversa Scalo">SP15 di Anversa Scalo</option>';
+            Name_options_str  += '<option value="SP15 km 0+000 - Caposaldo Inizio">SP15 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP15 km 1+020 - Caposaldo Fine">SP15 km 1+020 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP16 di Opi">SP16 di Opi</option>';
+            Name_options_str  += '<option value="SP16 km 0+000 - Caposaldo Inizio">SP16 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP16 km 1+680 - Caposaldo Fine">SP16 km 1+680 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP17 del Parco Nazionale d&apos;Abruzzo">SP17 del Parco Nazionale d&apos;Abruzzo</option>';
+            Name_options_str  += '<option value="SP17 dir A. km 0+000 - Caposaldo Inizio">SP17 dir A. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP17 dir A. km 3+320 - Caposaldo Fine">SP17 dir A. km 3+320 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP17 dir Aschi Alto">SP17 dir Aschi Alto</option>';
+            Name_options_str  += '<option value="SP17 dir C. km 0+000 - Caposaldo Inizio">SP17 dir C. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP17 dir C. km 1+830 - Caposaldo Fine">SP17 dir C. km 1+830 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP17 dir Carrito">SP17 dir Carrito</option>';
+            Name_options_str  += '<option value="SP17 dir P.S. km 0+000 - Caposaldo Inizio">SP17 dir P.S. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP17 dir P.S. km 2+800 - Caposaldo Fine">SP17 dir P.S. km 2+800 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP17 dir Pescina Scalo">SP17 dir Pescina Scalo</option>';
+            Name_options_str  += '<option value="SP17 km 0+000 - Caposaldo Inizio">SP17 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP17 km 31+300 - Caposaldo Fine">SP17 km 31+300 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP18 di Collarmele">SP18 di Collarmele</option>';
+            Name_options_str  += '<option value="SP18 km 0+000 - Caposaldo Inizio">SP18 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP18 km 1+500 - Caposaldo Fine">SP18 km 1+500 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP19 - Competenza Comunale Celano">SP19 - Competenza Comunale Celano</option>';
+            Name_options_str  += '<option value="SP19 - km 14+940 - Caposaldo Fine">SP19 - km 14+940 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP19 - km 2+150 - Inizio Competenza">SP19 - km 2+150 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP19 Ultrafucense">SP19 Ultrafucense</option>';
+            Name_options_str  += '<option value="SP19 km 0+000 - Caposaldo inizio">SP19 km 0+000 - Caposaldo inizio</option>';
+            Name_options_str  += '<option value="SP1dir A24 Tornimparte">SP1dir A24 Tornimparte</option>';
+            Name_options_str  += '<option value="SP1dir A24 Tornimparte km 0+000 - Caposaldo Inizio">SP1dir A24 Tornimparte km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP1dir A24 Tornimparte km 5+000 - Caposaldo Fine">SP1dir A24 Tornimparte km 5+000 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP2 del Lago di Campotosto">SP2 del Lago di Campotosto</option>';
+            Name_options_str  += '<option value="SP2 km 0+000 - Caposaldo Inizio">SP2 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP2 km 20+500 - Caposaldo Fine">SP2 km 20+500 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP20 - Competenza Comunale Avezzano">SP20 - Competenza Comunale Avezzano</option>';
+            Name_options_str  += '<option value="SP20 Marruviana">SP20 Marruviana</option>';
+            Name_options_str  += '<option value="SP20 dir - Competenza Comunale Avezzano">SP20 dir - Competenza Comunale Avezzano</option>';
+            Name_options_str  += '<option value="SP20 dir - km 0+000 - Caposaldo Inizio">SP20 dir - km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP20 dir - km 0+700 - Inizio Competenza">SP20 dir - km 0+700 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP20 dir - km 4+580 - Caposaldo Fine">SP20 dir - km 4+580 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP20 dir Incile">SP20 dir Incile</option>';
+            Name_options_str  += '<option value="SP20 km 0+000 - Caposaldo Inizio">SP20 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP20 km 2+273 - Inizio Competenza">SP20 km 2+273 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP20 km 22+000 - Caposaldo Fine">SP20 km 22+000 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP21 Magoranese A">SP21 Magoranese A</option>';
+            Name_options_str  += '<option value="SP21 Magoranese B">SP21 Magoranese B</option>';
+            Name_options_str  += '<option value="SP21 Magoranese C">SP21 Magoranese C</option>';
+            Name_options_str  += '<option value="SP21 km 0+000 - Caposaldo inizio">SP21 km 0+000 - Caposaldo inizio</option>';
+            Name_options_str  += '<option value="SP21 km 10+710 - Caposaldo Fine">SP21 km 10+710 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP21 km 6+500 - Innesto SR83 A">SP21 km 6+500 - Innesto SR83 A</option>';
+            Name_options_str  += '<option value="SP21 km 6+500 - Innesto SR83 B">SP21 km 6+500 - Innesto SR83 B</option>';
+            Name_options_str  += '<option value="SP21 km 8+950 - Innesto SR83 C">SP21 km 8+950 - Innesto SR83 C</option>';
+            Name_options_str  += '<option value="SP21 km 8+950 - Innesto SR83 D">SP21 km 8+950 - Innesto SR83 D</option>';
+            Name_options_str  += '<option value="SP22 - Competenza Comunale Avezzano">SP22 - Competenza Comunale Avezzano</option>';
+            Name_options_str  += '<option value="SP22 - Competenza Comunale Trasacco">SP22 - Competenza Comunale Trasacco</option>';
+            Name_options_str  += '<option value="SP22 Circonfucense A">SP22 Circonfucense A</option>';
+            Name_options_str  += '<option value="SP22 Circonfucense B">SP22 Circonfucense B</option>';
+            Name_options_str  += '<option value="SP22 dir A.F. km 0+000 - Caposaldo Inizio">SP22 dir A.F. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP22 dir A.F. km 0+455 - Caposaldo Fine">SP22 dir A.F. km 0+455 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP22 dir Acquafredda">SP22 dir Acquafredda</option>';
+            Name_options_str  += '<option value="SP22 dir V.M. - km 0+000 - Caposaldo Inizio">SP22 dir V.M. - km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP22 dir V.M. - km 2+060 - Caposaldo Fine">SP22 dir V.M. - km 2+060 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP22 dir Via Milano">SP22 dir Via Milano</option>';
+            Name_options_str  += '<option value="SP22 km 0+000 - Caposaldo inizio">SP22 km 0+000 - Caposaldo inizio</option>';
+            Name_options_str  += '<option value="SP22 km 13+140 - Interruzione Competenza">SP22 km 13+140 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP22 km 15+140 - Ripresa competenza">SP22 km 15+140 - Ripresa competenza</option>';
+            Name_options_str  += '<option value="SP22 km 31+300 - Caposaldo Fine">SP22 km 31+300 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP22 km 4+470 - Inizio Competenza">SP22 km 4+470 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP23 dell&apos;Alto Liri A">SP23 dell&apos;Alto Liri A</option>';
+            Name_options_str  += '<option value="SP23 dell&apos;Alto Liri B">SP23 dell&apos;Alto Liri B</option>';
+            Name_options_str  += '<option value="SP23 dir Capp km 0+000 - Caposaldo Inizio">SP23 dir Capp km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP23 dir Capp km 1+700 - Caposaldo Fine">SP23 dir Capp km 1+700 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP23 dir Cappadocia">SP23 dir Cappadocia</option>';
+            Name_options_str  += '<option value="SP23 dir Gallo">SP23 dir Gallo</option>';
+            Name_options_str  += '<option value="SP23 dir Gallo km 0+000 - Caposaldo Inizio">SP23 dir Gallo km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP23 dir Gallo km 4+400 - Caposaldo Fine">SP23 dir Gallo km 4+400 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP23 dir Verr km 0+000 - Caposaldo Inizio">SP23 dir Verr km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP23 dir Verr km 1+500 - Caposaldo Fine">SP23 dir Verr km 1+500 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP23 dir Verrecchie">SP23 dir Verrecchie</option>';
+            Name_options_str  += '<option value="SP23 km 0+000 - Caposaldo Inizio">SP23 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP23 km 23+300 - Caposaldo Intermedio">SP23 km 23+300 - Caposaldo Intermedio</option>';
+            Name_options_str  += '<option value="SP23 km 24+500 - Caposaldo Intermedio">SP23 km 24+500 - Caposaldo Intermedio</option>';
+            Name_options_str  += '<option value="SP23 km 27+100 - Caposaldo Fine">SP23 km 27+100 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP24 di Alba Fucense">SP24 di Alba Fucense</option>';
+            Name_options_str  += '<option value="SP24 dir - Competenza Comunale">SP24 dir - Competenza Comunale</option>';
+            Name_options_str  += '<option value="SP24 dir Panoramica">SP24 dir Panoramica</option>';
+            Name_options_str  += '<option value="SP24 dir km 0+000 - Caposaldo Inizio">SP24 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP24 dir km 1+830 - Inizio Competenza">SP24 dir km 1+830 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP24 dir km 8+830 - Caposaldo Fine">SP24 dir km 8+830 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP24 km 0+000 - Caposaldo Inizio">SP24 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP24 km 14+850 - Caposaldo Fine">SP24 km 14+850 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP25 Carseolana">SP25 Carseolana</option>';
+            Name_options_str  += '<option value="SP25 km 0+000 - Caposaldo Inizio">SP25 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP25 km 8+210 - Caposaldo Fine">SP25 km 8+210 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP26 Turanense">SP26 Turanense</option>';
+            Name_options_str  += '<option value="SP26 km 0+000 - Caposaldo Inizio">SP26 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP26 km 5+720 - Caposaldo Fine">SP26 km 5+720 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP27 del Cavaliere">SP27 del Cavaliere</option>';
+            Name_options_str  += '<option value="SP27 dir Civita">SP27 dir Civita</option>';
+            Name_options_str  += '<option value="SP27 dir Civita km 0+000 - Caposaldo Inizio">SP27 dir Civita km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP27 dir Civita km 1+880 - Caposaldo Fine">SP27 dir Civita km 1+880 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP27 dir Oricola">SP27 dir Oricola</option>';
+            Name_options_str  += '<option value="SP27 dir Oricola km 0+000 - Caposaldo Inizio">SP27 dir Oricola km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP27 dir Oricola km 3+430 - Caposaldo Fine">SP27 dir Oricola km 3+430 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP27 dir Pereto">SP27 dir Pereto</option>';
+            Name_options_str  += '<option value="SP27 dir Pereto km 0+000 - Caposaldo Inizio">SP27 dir Pereto km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP27 dir Pereto km 5+680 - Caposaldo Fine">SP27 dir Pereto km 5+680 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP27 dir R.B. km 0+000 - Caposaldo Inizio">SP27 dir R.B. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP27 dir R.B. km 1+970 - Caposaldo Fine">SP27 dir R.B. km 1+970 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP27 dir Rocca di Botte">SP27 dir Rocca di Botte</option>';
+            Name_options_str  += '<option value="SP27 km 0+000 - Caposaldo Inizio">SP27 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP27 km 7+400 - Fine Competenza">SP27 km 7+400 - Fine Competenza</option>';
+            Name_options_str  += '<option value="SP28 Verricense">SP28 Verricense</option>';
+            Name_options_str  += '<option value="SP28 km 0+000 - Caposaldo Inizio">SP28 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP28 km 7+200 - Caposaldo Fine">SP28 km 7+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP29 dell&apos;Alto Aterno - II° Tronco">SP29 dell&apos;Alto Aterno - II° Tronco</option>';
+            Name_options_str  += '<option value="SP29 dell&apos;Alto Aterno - I° Tronco">SP29 dell&apos;Alto Aterno - I° Tronco</option>';
+            Name_options_str  += '<option value="SP29 dir">SP29 dir</option>';
+            Name_options_str  += '<option value="SP29 dir km 0+000 - Caposaldo Inizio">SP29 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP29 dir km 2+970 - Caposaldo Fine">SP29 dir km 2+970 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP29 km 0+000 - Caposaldo Inizio">SP29 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP29 km 3+630 - Interruzione Competenza">SP29 km 3+630 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP29 km 3+630 - Ripresa Competenza">SP29 km 3+630 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP29 km 9+360 - Caposaldo Fine">SP29 km 9+360 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP3 Umbra">SP3 Umbra</option>';
+            Name_options_str  += '<option value="SP3 km 0+000 - Caposaldo Inizio">SP3 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP3 km 5+870 - Caposaldo Fine">SP3 km 5+870 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP30 di Cascina">SP30 di Cascina</option>';
+            Name_options_str  += '<option value="SP30 di Variante Santi">SP30 di Variante Santi</option>';
+            Name_options_str  += '<option value="SP30 di Variante Santi km 0+000 -Caposaldo Inizio">SP30 di Variante Santi km 0+000 -Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP30 di Variante Santi km 0+625 - Caposaldo Fine">SP30 di Variante Santi km 0+625 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP30 dir SG km 0+000 - Caposaldo Inizio">SP30 dir SG km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP30 dir SG km 1+040 - Caposaldo Fine">SP30 dir SG km 1+040 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP30 dir San Giovanni-SS260">SP30 dir San Giovanni-SS260</option>';
+            Name_options_str  += '<option value="SP30 dir Santi-Casaline-Menzano">SP30 dir Santi-Casaline-Menzano</option>';
+            Name_options_str  += '<option value="SP30 dir Santi-Casaline-Menzano km 0+000 - Caposaldo Inizio">SP30 dir Santi-Casaline-Menzano km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP30 dir Santi-Casaline-Menzano km 3+860 Caposaldo Fine">SP30 dir Santi-Casaline-Menzano km 3+860 Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP30 km 0+000 - Caposaldo Inizio">SP30 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP30 km 27+900 - Caposaldo Fine">SP30 km 27+900 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP31 Forulense I Tronco">SP31 Forulense I Tronco</option>';
+            Name_options_str  += '<option value="SP31 Forulense II Tronco">SP31 Forulense II Tronco</option>';
+            Name_options_str  += '<option value="SP31 Forulense km 0+000 Caposaldo Inizio">SP31 Forulense km 0+000 Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP31 Forulense km 17+630 Caposaldo Fine">SP31 Forulense km 17+630 Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP31 Forulense km 8+280 - Interruzione Competenza">SP31 Forulense km 8+280 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP31 Forulense km 8+280 - Ripresa Competenza">SP31 Forulense km 8+280 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP31 dir Cese di Preturo">SP31 dir Cese di Preturo</option>';
+            Name_options_str  += '<option value="SP31 dir Cese di Preturo km 0+000 Caposaldo Inizio">SP31 dir Cese di Preturo km 0+000 Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP31 dir Cese di Preturo km 2+320 Caposaldo Fine">SP31 dir Cese di Preturo km 2+320 Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP31 dir Collemarino">SP31 dir Collemarino</option>';
+            Name_options_str  += '<option value="SP31 dir Collemarino km 0+000 Caposaldo Inizio">SP31 dir Collemarino km 0+000 Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP31 dir Collemarino km 0+400 - Caposaldo Fine">SP31 dir Collemarino km 0+400 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP31 dir Collemassimo">SP31 dir Collemassimo</option>';
+            Name_options_str  += '<option value="SP31 dir Collemassimo km 0+000 Caposaldo Inizio">SP31 dir Collemassimo km 0+000 Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP31 dir Collemassimo km 1+360 Caposaldo Fine">SP31 dir Collemassimo km 1+360 Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP31dir Collettara-Santa Maria">SP31dir Collettara-Santa Maria</option>';
+            Name_options_str  += '<option value="SP31dir Collettara-Santa Maria km 0+000 Caposaldo Inizio">SP31dir Collettara-Santa Maria km 0+000 Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP31dir Collettara-Santa Maria km 3+310 - Caposaldo Fine">SP31dir Collettara-Santa Maria km 3+310 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP31dir Colli">SP31dir Colli</option>';
+            Name_options_str  += '<option value="SP31dir Colli km 0+000 - Caposaldo Inizio">SP31dir Colli km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP31dir Colli km 0+670 - Caposaldo Fine">SP31dir Colli km 0+670 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP31dir Piedi la Costa">SP31dir Piedi la Costa</option>';
+            Name_options_str  += '<option value="SP31dir Piedi la Costa km 0+000 - Caposaldo Inizio">SP31dir Piedi la Costa km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP31dir Piedi la Costa km 0+275 - Caposaldo Fine">SP31dir Piedi la Costa km 0+275 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP31dir Scoppito Paese">SP31dir Scoppito Paese</option>';
+            Name_options_str  += '<option value="SP31dir Scoppito Paese km 0+000 - Caposaldo Inizio">SP31dir Scoppito Paese km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP31dir Scoppito Paese km 0+900 - Caposaldo Fine">SP31dir Scoppito Paese km 0+900 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP32 di Lucoli Alto km 4+480 - Caposaldo Fine">SP32 di Lucoli Alto km 4+480 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP32dir di Lucoli Alto">SP32dir di Lucoli Alto</option>';
+            Name_options_str  += '<option value="SP32dir km 0+000 - Caposaldo Inizio">SP32dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP32dir km 0+610 - Caposaldo Fine">SP32dir km 0+610 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP33 di Coppito">SP33 di Coppito</option>';
+            Name_options_str  += '<option value="SP33 di Coppito km 0+000 - Caposaldo Inizio">SP33 di Coppito km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP33 di Coppito km 5+500 - Caposaldo Fine">SP33 di Coppito km 5+500 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP33 dir km 0+000 - Caposaldo Inizio">SP33 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP33 dir km 1+100 - Caposaldo Fine">SP33 dir km 1+100 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP33dir di Coppito">SP33dir di Coppito</option>';
+            Name_options_str  += '<option value="SP35 Roiense">SP35 Roiense</option>';
+            Name_options_str  += '<option value="SP35 km 0+000 - Caposaldo Inizio">SP35 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP35 km 7+470 - Caposaldo Fine">SP35 km 7+470 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP35bis di Bagno">SP35bis di Bagno</option>';
+            Name_options_str  += '<option value="SP35bis di Bagno km 0+000 - Caposaldo Inizio">SP35bis di Bagno km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP35bis di Bagno km 5+100 - Caposaldo Fine">SP35bis di Bagno km 5+100 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP35dir "Roiense"">SP35dir "Roiense"</option>';
+            Name_options_str  += '<option value="SP35dir km 0+000 - Caposaldo Inizio">SP35dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP35dir km 0+650 - Caposaldo Fine">SP35dir km 0+650 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP36 Forconese">SP36 Forconese</option>';
+            Name_options_str  += '<option value="SP36 Forconese km 15+755 - Caposaldo Fine">SP36 Forconese km 15+755 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP36dir Fossa Scalo">SP36dir Fossa Scalo</option>';
+            Name_options_str  += '<option value="SP36dir Fossa Scalo km 0+000 - Caposaldo Inizio">SP36dir Fossa Scalo km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP36dir Fossa Scalo  km 2+790 - Caposaldo Fine">SP36dir Fossa Scalo  km 2+790 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP37 di Cavalletto">SP37 di Cavalletto</option>';
+            Name_options_str  += '<option value="SP37 di Cavalletto km 0+000 - Caposaldo Inizio">SP37 di Cavalletto km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP37 di Cavalletto km 3+920 - Caposaldo Fine">SP37 di Cavalletto km 3+920 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP38 Nuova Vestina">SP38 Nuova Vestina</option>';
+            Name_options_str  += '<option value="SP38 dir S.F. km 0+000 - Caposaldo Inizio">SP38 dir S.F. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP38 dir S.F. km 4+200 - Caposaldo Fine">SP38 dir S.F. km 4+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP38 dir S.M. km 0+000 - Caposaldo Inizio">SP38 dir S.M. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP38 dir S.M. km 1+200 - Caposaldo Fine">SP38 dir S.M. km 1+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP38 dir San Felice">SP38 dir San Felice</option>';
+            Name_options_str  += '<option value="SP38 dir San Martino">SP38 dir San Martino</option>';
+            Name_options_str  += '<option value="SP38 km 0+000 - Caposaldo Inizio">SP38 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP38 km 13+500 - Caposaldo Fine">SP38 km 13+500 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP39 di Rocca di Cambio">SP39 di Rocca di Cambio</option>';
+            Name_options_str  += '<option value="SP39 km 0+000 - Caposaldo Inizio">SP39 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP39 km 5+975 - Caposaldo Fine">SP39 km 5+975 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP40 di Bominaco">SP40 di Bominaco</option>';
+            Name_options_str  += '<option value="SP40 di Bominaco km 0+000">SP40 di Bominaco km 0+000</option>';
+            Name_options_str  += '<option value="SP40dir Bominaco">SP40dir Bominaco</option>';
+            Name_options_str  += '<option value="SP40dir Bominaco km 0+000">SP40dir Bominaco km 0+000</option>';
+            Name_options_str  += '<option value="SP40dir Bominaco km 2+300">SP40dir Bominaco km 2+300</option>';
+            Name_options_str  += '<option value="SP41 di Navelli">SP41 di Navelli</option>';
+            Name_options_str  += '<option value="SP41 km 0+000 - Caposaldo Inizio">SP41 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP41 km 1+200 - Caposaldo Fine">SP41 km 1+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP41dir - Km 1+200 Caposaldo Fine">SP41dir - Km 1+200 Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP41dir di Navelli">SP41dir di Navelli</option>';
+            Name_options_str  += '<option value="SP41dir km 0+000 - Caposaldo Inizio">SP41dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP42 di Collepietro">SP42 di Collepietro</option>';
+            Name_options_str  += '<option value="SP42 km 0+000 - Caposaldo Inizio">SP42 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP42 km 3+260 - Caposaldo Fine">SP42 km 3+260 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP43 di San Benedetto in Perillis">SP43 di San Benedetto in Perillis</option>';
+            Name_options_str  += '<option value="SP43 di San Benedetto in Perillis km 0+000 - Caposaldo Inizio">SP43 di San Benedetto in Perillis km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP43 di San Benedetto in Perillis km 10+680 - Caposaldo Fine">SP43 di San Benedetto in Perillis km 10+680 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP44 di Fagnano">SP44 di Fagnano</option>';
+            Name_options_str  += '<option value="SP44 di Fagnano km 0+000 - Caposaldo Inizio">SP44 di Fagnano km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP44 di Fagnano km 2+280 - Caposaldo Fine">SP44 di Fagnano km 2+280 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP45 di Fontecchio">SP45 di Fontecchio</option>';
+            Name_options_str  += '<option value="SP45 km 0+000 - Caposaldo Inizio">SP45 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP45 km 4+010 - Caposaldo Fine">SP45 km 4+010 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP45dir S.Pio">SP45dir S.Pio</option>';
+            Name_options_str  += '<option value="SP45dir S.Pio km 0+000 - Caposaldo Inizio">SP45dir S.Pio km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP45dir S.Pio km 2+590 - Caposaldo Fine">SP45dir S.Pio km 2+590 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP46 di Tione">SP46 di Tione</option>';
+            Name_options_str  += '<option value="SP46 di Tione km 0+000 - Caposaldo Inizio">SP46 di Tione km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP46 di Tione km 13+973 - Caposaldo Fine">SP46 di Tione km 13+973 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP47 di Beffi Scalo">SP47 di Beffi Scalo</option>';
+            Name_options_str  += '<option value="SP47 di Beffi Scalo km 0+000 - Caposaldo Inizio">SP47 di Beffi Scalo km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP47 di Beffi Scalo km 3+720 - Caposaldo Fine">SP47 di Beffi Scalo km 3+720 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP48 di Acciano">SP48 di Acciano</option>';
+            Name_options_str  += '<option value="SP49 Corfiniense">SP49 Corfiniense</option>';
+            Name_options_str  += '<option value="SP49 km 0+000 - Caposaldo Inizio">SP49 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP49 km 3+510 - Caposaldo Fine">SP49 km 3+510 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP5 Silvaplana  I Tronco">SP5 Silvaplana  I Tronco</option>';
+            Name_options_str  += '<option value="SP5 dir BS km 0+000 - Caposaldo Inizio">SP5 dir BS km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP5 dir BS km 1+570 - Caposaldo Fine">SP5 dir BS km 1+570 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP5 dir Brecciasecca">SP5 dir Brecciasecca</option>';
+            Name_options_str  += '<option value="SP5 dir PP km 0+000 - Caposaldo Inizio">SP5 dir PP km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP5 dir PP km 3+560 - Caposaldo Fine">SP5 dir PP km 3+560 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP5 dir Prata-Peschiolo">SP5 dir Prata-Peschiolo</option>';
+            Name_options_str  += '<option value="SP5 dir Variante SS km 0+000 - Caposaldo Inizio">SP5 dir Variante SS km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP5 dir Variante SS km 0+800 -  Caposaldo Fine">SP5 dir Variante SS km 0+800 -  Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP5 dir Variante Sassa Scalo">SP5 dir Variante Sassa Scalo</option>';
+            Name_options_str  += '<option value="SP5 km 0+000 - Caposaldo Inizio">SP5 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP5 km 10+100 - Interruzione Competenza">SP5 km 10+100 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP5 km 10+100 - Ripresa Competenza">SP5 km 10+100 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP50 di Roccacasale">SP50 di Roccacasale</option>';
+            Name_options_str  += '<option value="SP50 km 0+000 - Caposaldo Inizio">SP50 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP50 km 2+930 - Caposaldo Fine">SP50 km 2+930 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP51 del Sagittario">SP51 del Sagittario</option>';
+            Name_options_str  += '<option value="SP51 dir Zappannotte">SP51 dir Zappannotte</option>';
+            Name_options_str  += '<option value="SP51 dir Zappannotte - Competenza Comunale Sulmona">SP51 dir Zappannotte - Competenza Comunale Sulmona</option>';
+            Name_options_str  += '<option value="SP51 dir Zappannotte km 0+000 - Caposaldo Inizio">SP51 dir Zappannotte km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP51 dir Zappannotte km 0+200 - Inizio Competenza">SP51 dir Zappannotte km 0+200 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP51 dir Zappannotte km 2+300 - Caposaldo Fine">SP51 dir Zappannotte km 2+300 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP51 km 0+000 - Caposaldo Inizio">SP51 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP51 km 4+770 - Caposaldo Fine">SP51 km 4+770 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP52 Nolfese">SP52 Nolfese</option>';
+            Name_options_str  += '<option value="SP52 dir Bugnara">SP52 dir Bugnara</option>';
+            Name_options_str  += '<option value="SP52 dir Bugnara km 0+000 - Caposaldo Inizio">SP52 dir Bugnara km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP52 dir Bugnara km 3+050 - Caposaldo Fine">SP52 dir Bugnara km 3+050 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP52 dir Torrone">SP52 dir Torrone</option>';
+            Name_options_str  += '<option value="SP52 dir Torrone km 0+000 - Caposaldo Inizio">SP52 dir Torrone km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP52 dir Torrone km 3+750 - Caposaldo Fine">SP52 dir Torrone km 3+750 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP52 km 0+000 - Caposaldo Inizio">SP52 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP52 km 11+620 - Caposaldo Fine">SP52 km 11+620 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP53 dell&apos;Albanese">SP53 dell&apos;Albanese</option>';
+            Name_options_str  += '<option value="SP53 dell&apos;Albanese - Competenza Comunale Sulmona">SP53 dell&apos;Albanese - Competenza Comunale Sulmona</option>';
+            Name_options_str  += '<option value="SP53 dir A Forma Torta">SP53 dir A Forma Torta</option>';
+            Name_options_str  += '<option value="SP53 dir A Forma Torta - Competenza Comunale Sulmona">SP53 dir A Forma Torta - Competenza Comunale Sulmona</option>';
+            Name_options_str  += '<option value="SP53 dir A km 0+000 - Caposaldo Inizio">SP53 dir A km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP53 dir A km 1+350 - Inizio Competenza">SP53 dir A km 1+350 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP53 dir A km 3+200 - Caposaldo Fine">SP53 dir A km 3+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP53 dir B Forma Torta">SP53 dir B Forma Torta</option>';
+            Name_options_str  += '<option value="SP53 dir B km 0+000 - Caposaldo Inizio">SP53 dir B km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP53 dir B km 0+610 - Caposaldo Fine">SP53 dir B km 0+610 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP53 dir C Forma Torta">SP53 dir C Forma Torta</option>';
+            Name_options_str  += '<option value="SP53 dir C km 0+000 - Caposaldo Inizio">SP53 dir C km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP53 dir C km 1+360 - Caposaldo Fine">SP53 dir C km 1+360 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP53 km 0+000 - Caposaldo Inizio">SP53 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP53 km 1+800 - Inizio Competenza">SP53 km 1+800 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP53 km 6+900 - Caposaldo Fine">SP53 km 6+900 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP54 di Fonte Romana">SP54 di Fonte Romana</option>';
+            Name_options_str  += '<option value="SP54 km 0+000 - Caposaldo Inizio">SP54 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP54 km 8+225 - Caposaldo Fine">SP54 km 8+225 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP55 di Pescocostanzo">SP55 di Pescocostanzo</option>';
+            Name_options_str  += '<option value="SP55 km 0+000 - Caposaldo Inizio">SP55 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP55 km 21+250 - Caposaldo Fine">SP55 km 21+250 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP56 bretella SS17">SP56 bretella SS17</option>';
+            Name_options_str  += '<option value="SP56 bretella SS17 km 0+000 - Caposaldo Inizio">SP56 bretella SS17 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP56 bretella SS17 km 0+380 - Caposaldo Fine">SP56 bretella SS17 km 0+380 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP56 di Rivisondoli">SP56 di Rivisondoli</option>';
+            Name_options_str  += '<option value="SP56 dir Stazione">SP56 dir Stazione</option>';
+            Name_options_str  += '<option value="SP56 dir Stazione km 0+000 - Caposaldo Inizio">SP56 dir Stazione km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP56 dir Stazione km 0+150 - Caposaldo Fine">SP56 dir Stazione km 0+150 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP56 dir km 0+000 - Caposaldo Inizio">SP56 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP56 dir km 1+330 - Caposaldo Fine">SP56 dir km 1+330 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP56 diramazione">SP56 diramazione</option>';
+            Name_options_str  += '<option value="SP56 km 0+000 - Caposaldo Inizio">SP56 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP56 km 3+540 - Caposaldo Fine">SP56 km 3+540 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP57 di Ateleta Scalo">SP57 di Ateleta Scalo</option>';
+            Name_options_str  += '<option value="SP57 km 0+000 - Caposaldo Inizio">SP57 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP57 km 0+190 - Caposaldo Fine">SP57 km 0+190 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP58 di Scontrone">SP58 di Scontrone</option>';
+            Name_options_str  += '<option value="SP58 km 0+000 - Caposaldo Inizio">SP58 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP58 km 2+800 - Caposaldo Fine">SP58 km 2+800 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP59 del Lago di Barrea">SP59 del Lago di Barrea</option>';
+            Name_options_str  += '<option value="SP59 km 0+000 - Caposaldo Inizio">SP59 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP59 km 4+650 - Caposaldo Fine">SP59 km 4+650 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP60 Marsico-Sannitica A">SP60 Marsico-Sannitica A</option>';
+            Name_options_str  += '<option value="SP60 Marsico-Sannitica B">SP60 Marsico-Sannitica B</option>';
+            Name_options_str  += '<option value="SP60 dir Cocullo">SP60 dir Cocullo</option>';
+            Name_options_str  += '<option value="SP60 dir km 0+000 - Caposaldo Inizio">SP60 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP60 dir km 1+930 - Caposaldo Fine">SP60 dir km 1+930 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP60 km 0+000 - Caposaldo Inizio">SP60 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP60 km 19+750 - Caposaldo Fine">SP60 km 19+750 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP60 km 7+690 - Caposaldo Intermedio">SP60 km 7+690 - Caposaldo Intermedio</option>';
+            Name_options_str  += '<option value="SP61 Varanese">SP61 Varanese</option>';
+            Name_options_str  += '<option value="SP61 km 0+000 - Caposaldo Inizio">SP61 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP61 km 9+980 - Caposaldo Fine">SP61 km 9+980 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP62 Palentina A">SP62 Palentina A</option>';
+            Name_options_str  += '<option value="SP62 Palentina B">SP62 Palentina B</option>';
+            Name_options_str  += '<option value="SP62 Palentina C">SP62 Palentina C</option>';
+            Name_options_str  += '<option value="SP62 Palentina D">SP62 Palentina D</option>';
+            Name_options_str  += '<option value="SP62 dir - Circonvallazione Nord">SP62 dir - Circonvallazione Nord</option>';
+            Name_options_str  += '<option value="SP62 dir CIRC.N. km 0+000 - Caposaldo Inizio">SP62 dir CIRC.N. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP62 dir CIRC.N. km 1+700 - Caposaldo Fine">SP62 dir CIRC.N. km 1+700 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP62 dir CORC. km 0+000 - Caposaldo Inizio">SP62 dir CORC. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP62 dir CORC. km 4+000 - Caposaldo Fine">SP62 dir CORC. km 4+000 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP62 dir Corcumello">SP62 dir Corcumello</option>';
+            Name_options_str  += '<option value="SP62 dir VAR C. km 0+000 - Caposaldo Inizio">SP62 dir VAR C. km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP62 dir VAR C. km 0+550 - Caposaldo Fine">SP62 dir VAR C. km 0+550 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP62 dir Variante Cappelle DM">SP62 dir Variante Cappelle DM</option>';
+            Name_options_str  += '<option value="SP62 km 0+000 - Caposaldo Inizio">SP62 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP62 km 14+230 - Interruzione Competenza">SP62 km 14+230 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP62 km 14+700 - Ripresa Competenza">SP62 km 14+700 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP62 km 16+700 - Interruzione Competenza">SP62 km 16+700 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP62 km 18+500 - Ripresa Competenza">SP62 km 18+500 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP62 km 20+460 - Caposaldo Fine">SP62 km 20+460 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP62 km 3+700 - Interruzione Competenza">SP62 km 3+700 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP62 km 4+000 - Ripresa Competenza">SP62 km 4+000 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP63 Simbruina">SP63 Simbruina</option>';
+            Name_options_str  += '<option value="SP63 dir Pescocanale">SP63 dir Pescocanale</option>';
+            Name_options_str  += '<option value="SP63 dir km 0+000 - Caposaldo Inizio">SP63 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP63 dir km 4+200 - Caposaldo Fine">SP63 dir km 4+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP63 km 0+000 - Caposaldo Inizio">SP63 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP63 km 20+950 - Fine Competenza">SP63 km 20+950 - Fine Competenza</option>';
+            Name_options_str  += '<option value="SP64 di Canistro">SP64 di Canistro</option>';
+            Name_options_str  += '<option value="SP64 km 0+000 - Caposaldo Inizio">SP64 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP64 km 5+800 - Caposaldo Fine">SP64 km 5+800 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP65 di Civita D&apos;Antino">SP65 di Civita D&apos;Antino</option>';
+            Name_options_str  += '<option value="SP65 dir Morino">SP65 dir Morino</option>';
+            Name_options_str  += '<option value="SP65 dir km 0+000 - Caposaldo Inizio">SP65 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP65 dir km 0+490 - Caposaldo Fine">SP65 dir km 0+490 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP65 km 0+000 - Caposaldo Inizio">SP65 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP65 km 7+900 - Caposaldo Fine">SP65 km 7+900 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP66 di Rendinara">SP66 di Rendinara</option>';
+            Name_options_str  += '<option value="SP66 km 0+000 - Caposaldo Inizio">SP66 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP66 km 7+420 - Caposaldo Fine">SP66 km 7+420 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP67 di San Vincenzo Valle Roveto">SP67 di San Vincenzo Valle Roveto</option>';
+            Name_options_str  += '<option value="SP67 dir "San Vincenzo Nuovo"">SP67 dir "San Vincenzo Nuovo"</option>';
+            Name_options_str  += '<option value="SP67 dir km 0+000 - Caposaldo Inizio">SP67 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP67 dir km 0+750 - Caposaldo Fine">SP67 dir km 0+750 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP67 km 0+000 - Caposaldo Inizio">SP67 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP67 km 2+800 - Caposaldo Fine">SP67 km 2+800 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP68 di Roccavivi">SP68 di Roccavivi</option>';
+            Name_options_str  += '<option value="SP68 km 0+000 - Caposaldo Inizio">SP68 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP68 km 2+350 - Caposaldo Fine">SP68 km 2+350 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP69 Sabinese">SP69 Sabinese</option>';
+            Name_options_str  += '<option value="SP69 km 0+000 - Caposaldo Inizio">SP69 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP69 km 5+190 - Caposaldo Fine">SP69 km 5+190 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP7 - km 24+200 - Caposaldo Fine">SP7 - km 24+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP7 di Castel del Monte">SP7 di Castel del Monte</option>';
+            Name_options_str  += '<option value="SP7 km 0+000 - Caposaldo Inizio">SP7 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP70 di Collebrincioni - II° Tronco">SP70 di Collebrincioni - II° Tronco</option>';
+            Name_options_str  += '<option value="SP70 di Collebrincioni - I°Tronco - Competenza Comunale">SP70 di Collebrincioni - I°Tronco - Competenza Comunale</option>';
+            Name_options_str  += '<option value="SP70 km 0+000 - Caposaldo Inizio">SP70 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP70 km 1+600 - Inizio Competenza">SP70 km 1+600 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SP70 km 10+740 - Caposaldo Fine">SP70 km 10+740 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP72 di Capestrano">SP72 di Capestrano</option>';
+            Name_options_str  += '<option value="SP72 km 0+000 - Caposaldo Inizio">SP72 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP72 km 1+200 - Caposaldo Fine">SP72 km 1+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP72 km 2+987 - Caposaldo Fine">SP72 km 2+987 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP72 tratto SR 602 - Prov. PE">SP72 tratto SR 602 - Prov. PE</option>';
+            Name_options_str  += '<option value="SP8 "Peltuinate - I Tronco"">SP8 "Peltuinate - I Tronco"</option>';
+            Name_options_str  += '<option value="SP8 I Tronco km 0+000 - Caposaldo Inizio">SP8 I Tronco km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP8 I Tronco km 13+650 - Caposaldo Intermedio">SP8 I Tronco km 13+650 - Caposaldo Intermedio</option>';
+            Name_options_str  += '<option value="SP8 Peltuinate - II Tronco">SP8 Peltuinate - II Tronco</option>';
+            Name_options_str  += '<option value="SP8 Peltuinate - II Tronco km 25+350 - Caposaldo Fine">SP8 Peltuinate - II Tronco km 25+350 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP8 Peltuinate- II Tronco km 15+300 - Ripresa Competenza">SP8 Peltuinate- II Tronco km 15+300 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP80 di Campo Imperatore I Tratto Vado di Sole">SP80 di Campo Imperatore I Tratto Vado di Sole</option>';
+            Name_options_str  += '<option value="SP80 di Campo Imperatore II Tratto Fonte Vetica">SP80 di Campo Imperatore II Tratto Fonte Vetica</option>';
+            Name_options_str  += '<option value="SP80 km 0+000 - Caposaldo Inizio">SP80 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP80 km 2+000 - Caposaldo Fine">SP80 km 2+000 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP80 km 4+600 - Caposaldo Fine">SP80 km 4+600 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP82 Circumlacuale di Scanno">SP82 Circumlacuale di Scanno</option>';
+            Name_options_str  += '<option value="SP82 dir Difesa">SP82 dir Difesa</option>';
+            Name_options_str  += '<option value="SP82 dir km 0+000 - Caposaldo Inizio">SP82 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP82 dir km 2+300 - Caposaldo Fine">SP82 dir km 2+300 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP82 km 0+000 - Caposaldo Inizio">SP82 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP82 km 2+900 - Caposaldo Fine">SP82 km 2+900 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP84 Nuova Sangrina">SP84 Nuova Sangrina</option>';
+            Name_options_str  += '<option value="SP84 km 0+000 - Caposaldo Inizio">SP84 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP84 km 0+195 - Interruzione Competenza">SP84 km 0+195 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SP84 km 0+270 - Ripresa Competenza">SP84 km 0+270 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SP84 km 13+720- Caposaldo Fine">SP84 km 13+720- Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP86 del Vasto">SP86 del Vasto</option>';
+            Name_options_str  += '<option value="SP86 km 0+000 - Caposaldo Inizio">SP86 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP86 km 18+630 - Caposaldo Fine">SP86 km 18+630 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP87 di Meta">SP87 di Meta</option>';
+            Name_options_str  += '<option value="SP87 km 0+000 - Caposaldo Inizio">SP87 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP87 km 7+200 - Caposaldo Fine">SP87 km 7+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP88 di Roccacinquemiglia">SP88 di Roccacinquemiglia</option>';
+            Name_options_str  += '<option value="SP88 km 0+000 - Caposaldo Inizio">SP88 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP88 km 1+720 - Caposaldo Fine">SP88 km 1+720 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP89 Dorsale Palentina">SP89 Dorsale Palentina</option>';
+            Name_options_str  += '<option value="SP89 km 0+000 - Caposaldo Inizio">SP89 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP89 km 22+865 - Caposaldo Fine">SP89 km 22+865 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP8dir Carapelle">SP8dir Carapelle</option>';
+            Name_options_str  += '<option value="SP8dir Carapelle km 0+000 - Caposaldo inizio">SP8dir Carapelle km 0+000 - Caposaldo inizio</option>';
+            Name_options_str  += '<option value="SP8dir Carapelle km 1+970 - Caposaldo Fine">SP8dir Carapelle km 1+970 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP8dir Tussio">SP8dir Tussio</option>';
+            Name_options_str  += '<option value="SP8dir Tussio km 0+000 - Caposaldo Inizio">SP8dir Tussio km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP8dir Tussio km 3+100 - Caposaldo Fine">SP8dir Tussio km 3+100 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP9 Marsicana - Castel di Ieri-Goriano Sicoli">SP9 Marsicana - Castel di Ieri-Goriano Sicoli</option>';
+            Name_options_str  += '<option value="SP9 Marsicana - Raiano-Forca Caruso">SP9 Marsicana - Raiano-Forca Caruso</option>';
+            Name_options_str  += '<option value="SP9 Marsicana I Tronco km 0+000 - Caposaldo Inizio">SP9 Marsicana I Tronco km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP9 Marsicana I Tronco km 16+390 - Caposaldo Fine">SP9 Marsicana I Tronco km 16+390 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP9 Marsicana II Tronco km 0+000 - Caposaldo Inizio">SP9 Marsicana II Tronco km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP9 Marsicana II Tronco km 5+350 - Caposaldo Fine">SP9 Marsicana II Tronco km 5+350 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP90 di Morrea">SP90 di Morrea</option>';
+            Name_options_str  += '<option value="SP90 km 0+000 - Caposaldo Inizio">SP90 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP90 km 5+500 - Caposaldo Fine">SP90 km 5+500 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP91 di Stiffe">SP91 di Stiffe</option>';
+            Name_options_str  += '<option value="SP91 di Stiffe km 0+000 - Caposaldo Inizio">SP91 di Stiffe km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP91 di Stiffe km 8+356 - Caposaldo Fine">SP91 di Stiffe km 8+356 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP92 di Villa Sant&apos;Angelo">SP92 di Villa Sant&apos;Angelo</option>';
+            Name_options_str  += '<option value="SP92 di Villa Sant&apos;Angelo km 0+000 - Caposaldo Inizio">SP92 di Villa Sant&apos;Angelo km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP92 di Villa Sant&apos;Angelo km 2+550 - Caposaldo Fine">SP92 di Villa Sant&apos;Angelo km 2+550 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP93 di Civitaretenga">SP93 di Civitaretenga</option>';
+            Name_options_str  += '<option value="SP93 km 0+000 - Caposaldo Inizio">SP93 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP93 km 3+300 - Caposaldo Fine">SP93 km 3+300 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP94 km 0+000 - Caposaldo Inizio">SP94 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP94 km 15+200 - Caposaldo Fine">SP94 km 15+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP95 di Monte Zurrone">SP95 di Monte Zurrone</option>';
+            Name_options_str  += '<option value="SP95 km 0+000 - Caposaldo Inizio">SP95 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP95 km 2+225- Caposaldo Fine">SP95 km 2+225- Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP96 di Valle di Tufo">SP96 di Valle di Tufo</option>';
+            Name_options_str  += '<option value="SP96 km 0+000 - Caposaldo Inizio">SP96 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP96 km 4+740 - Caposaldo Fine">SP96 km 4+740 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP97 del Lago Racollo">SP97 del Lago Racollo</option>';
+            Name_options_str  += '<option value="SP97 km 0+000 - Caposaldo Inizio">SP97 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP97 km 13+250 - Caposaldo Fine">SP97 km 13+250 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP98 delle Vigne">SP98 delle Vigne</option>';
+            Name_options_str  += '<option value="SP98 km 0+000 - Caposaldo Inizio">SP98 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP98 km 10+415 - Caposaldo Fine">SP98 km 10+415 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP99 di Pettorano">SP99 di Pettorano</option>';
+            Name_options_str  += '<option value="SP99 dir Stazione">SP99 dir Stazione</option>';
+            Name_options_str  += '<option value="SP99 dir km 0+000 - Caposaldo Inizio">SP99 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP99 dir km 0+720 - Caposaldo Fine">SP99 dir km 0+720 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP99 km 0+000 - Caposaldo Inizio">SP99 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP99 km 2+650 - Caposaldo Fine">SP99 km 2+650 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP9dir Cocullo">SP9dir Cocullo</option>';
+            Name_options_str  += '<option value="SP9dir Cocullo km 0+000 - Caposaldo Inizio">SP9dir Cocullo km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP9dir Cocullo km 5+200 - Caposaldo Fine">SP9dir Cocullo km 5+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP9dir Goriano Sicoli km 0+000 - Caposaldo Inizio">SP9dir Goriano Sicoli km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SP9dir Goriano Sicoli km 1+020 - Caposaldo Fine">SP9dir Goriano Sicoli km 1+020 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SP9dir Traversa Interna Goriano Sicoli">SP9dir Traversa Interna Goriano Sicoli</option>';
+            Name_options_str  += '<option value="SR 260 Picente I° Tronco - Non Competenza">SR 260 Picente I° Tronco - Non Competenza</option>';
+            Name_options_str  += '<option value="SR 260 km 0+930 - Inizio Competenza">SR 260 km 0+930 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SR 261 Subequana km 35+710 - Caposaldo Fine">SR 261 Subequana km 35+710 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR 602 di Forca di Penne - innesto SS153">SR 602 di Forca di Penne - innesto SS153</option>';
+            Name_options_str  += '<option value="SR 615 di Monteluco B">SR 615 di Monteluco B</option>';
+            Name_options_str  += '<option value="SR 615 km 0+760 - Inizio Competenza">SR 615 km 0+760 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SR17 km 68+592 - Caposaldo Inizio">SR17 km 68+592 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR17 km 78+180 - Caposaldo Fine">SR17 km 78+180 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR17 svolte di Popoli">SR17 svolte di Popoli</option>';
+            Name_options_str  += '<option value="SR17bis - II° Tronco">SR17bis - II° Tronco</option>';
+            Name_options_str  += '<option value="SR17bis - I° Tronco">SR17bis - I° Tronco</option>';
+            Name_options_str  += '<option value="SR17bis dir A (Paganica)">SR17bis dir A (Paganica)</option>';
+            Name_options_str  += '<option value="SR17bis dir A (Paganica) km 0+000 - Caposaldo Inizio">SR17bis dir A (Paganica) km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR17bis dir A (Paganica) km 3+000 - Caposaldo Fine">SR17bis dir A (Paganica) km 3+000 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR17bis dir B (Montecristo)">SR17bis dir B (Montecristo)</option>';
+            Name_options_str  += '<option value="SR17bis dir B (Montecristo) km 0+000 - Caposaldo Inizio">SR17bis dir B (Montecristo) km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR17bis dir B (Montecristo) km 1+800 - Caposaldo Fine">SR17bis dir B (Montecristo) km 1+800 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR17bis dir C">SR17bis dir C</option>';
+            Name_options_str  += '<option value="SR17bis dir C km 0+000 - Caposaldo Inizio">SR17bis dir C km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR17bis dir C km 10+000 - Caposaldo Fine">SR17bis dir C km 10+000 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR17bis km 18+700 - Inizio Competenza">SR17bis km 18+700 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SR17bis km 49+300 - Caposaldo Intermedio">SR17bis km 49+300 - Caposaldo Intermedio</option>';
+            Name_options_str  += '<option value="SR17bis km 76+200 - Caposaldo Fine">SR17bis km 76+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR260 Picente II Tronco">SR260 Picente II Tronco</option>';
+            Name_options_str  += '<option value="SR260 Picente km 0+000 - Caposaldo Inizio">SR260 Picente km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR260 km 7+230 - Caposaldo Fine">SR260 km 7+230 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR261 Subequana">SR261 Subequana</option>';
+            Name_options_str  += '<option value="SR261 Subequana km 0+000 - Caposaldo Inizio">SR261 Subequana km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR437 dell&apos;Aremogna">SR437 dell&apos;Aremogna</option>';
+            Name_options_str  += '<option value="SR437 dir">SR437 dir</option>';
+            Name_options_str  += '<option value="SR437 dir km 0+000 - Caposaldo Inizio">SR437 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR437 dir km 0+520 - Caposaldo Fine">SR437 dir km 0+520 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR437 km 0+000 - Caposaldo Inizio">SR437 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR437 km 10+300 - Caposaldo Fine">SR437 km 10+300 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR471 di Leonessa">SR471 di Leonessa</option>';
+            Name_options_str  += '<option value="SR471 km 48+215 - Inizio Competenza">SR471 km 48+215 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SR471 km 58+715 - Caposaldo Fine">SR471 km 58+715 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR479 - Competenza Comunale Anversa">SR479 - Competenza Comunale Anversa</option>';
+            Name_options_str  += '<option value="SR479 - Competenza Comunale Sulmona">SR479 - Competenza Comunale Sulmona</option>';
+            Name_options_str  += '<option value="SR479 - Tratto Anversa-Villetta Barrea">SR479 - Tratto Anversa-Villetta Barrea</option>';
+            Name_options_str  += '<option value="SR479 - Tratto Sulmona-Anversa">SR479 - Tratto Sulmona-Anversa</option>';
+            Name_options_str  += '<option value="SR479 - Variante Anversa">SR479 - Variante Anversa</option>';
+            Name_options_str  += '<option value="SR479 km 0+000 - Caposaldo Inizio">SR479 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR479 km 0+000 - Caposaldo Inizio Variante Anversa">SR479 km 0+000 - Caposaldo Inizio Variante Anversa</option>';
+            Name_options_str  += '<option value="SR479 km 0+850 - Caposaldo Fine Variante Anversa">SR479 km 0+850 - Caposaldo Fine Variante Anversa</option>';
+            Name_options_str  += '<option value="SR479 km 1+450 - Inizio Competenza">SR479 km 1+450 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SR479 km 15+000 - Interruzione Competenza">SR479 km 15+000 - Interruzione Competenza</option>';
+            Name_options_str  += '<option value="SR479 km 15+700 - Ripresa Competenza">SR479 km 15+700 - Ripresa Competenza</option>';
+            Name_options_str  += '<option value="SR479 km 59+560 - Caposaldo Fine">SR479 km 59+560 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR5 Tiburtina Valeria">SR5 Tiburtina Valeria</option>';
+            Name_options_str  += '<option value="SR5 km 70+000 - Inizio Competenza">SR5 km 70+000 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SR5 km 98+200 - Fine Competenza">SR5 km 98+200 - Fine Competenza</option>';
+            Name_options_str  += '<option value="SR509 di Forca D&apos;Acero">SR509 di Forca D&apos;Acero</option>';
+            Name_options_str  += '<option value="SR509 km 0+000 - Caposaldo Inizio">SR509 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR509 km 9+600 - Caposaldo Fine">SR509 km 9+600 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR520 del Ceraso">SR520 del Ceraso</option>';
+            Name_options_str  += '<option value="SR520 km 0+000 - Caposaldo Inizio">SR520 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR520 km 4+200 - Caposaldo Fine">SR520 km 4+200 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR577 del Lago di Campotosto">SR577 del Lago di Campotosto</option>';
+            Name_options_str  += '<option value="SR577 km 0+000 - Caposaldo Inizio">SR577 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR577 km 26+400 - Caposaldo Fine">SR577 km 26+400 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR579 Palentina">SR579 Palentina</option>';
+            Name_options_str  += '<option value="SR579 km 0+000 - Caposaldo Inizio">SR579 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR579 km 13+400 - Caposaldo Fine">SR579 km 13+400 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR5bis Vestina Sarentina A">SR5bis Vestina Sarentina A</option>';
+            Name_options_str  += '<option value="SR5bis Vestina Sarentina B">SR5bis Vestina Sarentina B</option>';
+            Name_options_str  += '<option value="SR5bis km 0+000 - Caposaldo Inizio">SR5bis km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR5bis km 11+700 - Caposaldo Intermedio">SR5bis km 11+700 - Caposaldo Intermedio</option>';
+            Name_options_str  += '<option value="SR5bis km 31+000 - Caposaldo Fine">SR5bis km 31+000 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR5dir Raiano-SS17">SR5dir Raiano-SS17</option>';
+            Name_options_str  += '<option value="SR5dir km 0+000 - Caposaldo Inizio">SR5dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR5dir km 5+800 - Caposaldo Fine">SR5dir km 5+800 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR602 di Forca di Penne">SR602 di Forca di Penne</option>';
+            Name_options_str  += '<option value="SR602 km 0+000 - Caposaldo Inizio">SR602 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR602 km 17+670 - Caposaldo Fine">SR602 km 17+670 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR615 di Monteluco A - Competenza Comunale">SR615 di Monteluco A - Competenza Comunale</option>';
+            Name_options_str  += '<option value="SR615 di Monteluco km 0+000 - Caposaldo Inizio">SR615 di Monteluco km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR615 di Monteluco km 10+640 - Caposaldo Fine">SR615 di Monteluco km 10+640 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR615 dir di Monteluco">SR615 dir di Monteluco</option>';
+            Name_options_str  += '<option value="SR615 dir km 0+000 - Caposaldo Inizio">SR615 dir km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR615 dir km 2+240 - Caposaldo Fine">SR615 dir km 2+240 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SR82 Della Valle del Liri - Tratto Competenza Comunale">SR82 Della Valle del Liri - Tratto Competenza Comunale</option>';
+            Name_options_str  += '<option value="SR82 della Valle del Liri">SR82 della Valle del Liri</option>';
+            Name_options_str  += '<option value="SR82 km 0+000 - Caposaldo Inizio">SR82 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SR82 km 1+100 - Inizio Competenza">SR82 km 1+100 - Inizio Competenza</option>';
+            Name_options_str  += '<option value="SR82 km 47+700 - Fine Competenza">SR82 km 47+700 - Fine Competenza</option>';
+            Name_options_str  += '<option value="SS17 NSA 253">SS17 NSA 253</option>';
+            Name_options_str  += '<option value="SS17 NSA 253 km 0+000 - Caposaldo Inizio">SS17 NSA 253 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SS17 NSA 253 km 2+100 - Caposaldo Fine">SS17 NSA 253 km 2+100 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SS17 bis NSA 253">SS17 bis NSA 253</option>';
+            Name_options_str  += '<option value="SS17 bis NSA 253 km 0+000 - Caposaldo Inizio">SS17 bis NSA 253 km 0+000 - Caposaldo Inizio</option>';
+            Name_options_str  += '<option value="SS17 bis NSA 253 km 3+850 - Caposaldo Fine">SS17 bis NSA 253 km 3+850 - Caposaldo Fine</option>';
+            Name_options_str  += '<option value="SULMONA">SULMONA</option>';
+            Name_options_str  += '<option value="TAGLIACOZZO">TAGLIACOZZO</option>';
+            Name_options_str  += '<option value="TIONE DEGLI ABRUZZI">TIONE DEGLI ABRUZZI</option>';
+            Name_options_str  += '<option value="TORNIMPARTE">TORNIMPARTE</option>';
+            Name_options_str  += '<option value="TRASACCO">TRASACCO</option>';
+            Name_options_str  += '<option value="VILLA SANT&apos;ANGELO">VILLA SANT&apos;ANGELO</option>';
+            Name_options_str  += '<option value="VILLA SANTA LUCIA DEGLI ABRUZZI">VILLA SANTA LUCIA DEGLI ABRUZZI</option>';
+            Name_options_str  += '<option value="VILLALAGO">VILLALAGO</option>';
+            Name_options_str  += '<option value="VILLAVALLELONGA">VILLAVALLELONGA</option>';
+            Name_options_str  += '<option value="VILLETTA BARREA">VILLETTA BARREA</option>';
+            Name_options_str  += '<option value="VITTORITO">VITTORITO</option>';
+            sel_Name.innerHTML = Name_options_str;
+            div_Name.appendChild(sel_Name);
+            var lab_Name = document.createElement('div');
+            lab_Name.innerHTML = 'Name';
+            lab_Name.className = 'filterlabel';
+            div_Name.appendChild(lab_Name);
+            var reset_Name = document.createElement('div');
+            reset_Name.innerHTML = 'clear filter';
+            reset_Name.className = 'filterlabel';
+            reset_Name.onclick = function() {
+                var options = document.getElementById("sel_Name").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Name.appendChild(reset_Name);
+        resetLabels([layer_CONFINICOMUNALISHP_4]);
+        map.on("zoomend", function(){
+            resetLabels([layer_CONFINICOMUNALISHP_4]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_CONFINICOMUNALISHP_4]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_CONFINICOMUNALISHP_4]);
+        });
+        </script>
+    </body>
+</html>
